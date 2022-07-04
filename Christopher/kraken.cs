@@ -1,19 +1,15 @@
-﻿
-using System;
-using System.IO;
+﻿using System;
 using System.Linq;
 using System.Net.Http;
-using System.Net.WebSockets;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace KrakenCSharpExampleConsole
 {
-    class Program
+    internal class Program
     {
-        static async Task Main(string[] args)
+        private static async Task Main(string[] args)
         {
             //TODO: UPDATE WITH YOUR KEYS :)
             string apiPublicKey = "YOUR_PUBLIC_KEY";
@@ -51,10 +47,9 @@ namespace KrakenCSharpExampleConsole
 
                     publicResponse = await QueryPublicEndpoint(publicEndpoint, publicInputParameters);
                     System.Console.WriteLine(publicResponse);
-
                 }
 
-                #endregion
+                #endregion Public REST API Examples
 
                 #region Private REST API Examples
 
@@ -81,41 +76,39 @@ namespace KrakenCSharpExampleConsole
                     //string privateInputParameters = "pair=xdgeur&type=buy&ordertype=market&volume=3000&userref=789" //Userref Example
 
                     //string privateEndpoint = "Balance" //{"error":[]} IS SUCCESS, Means EMPTY BALANCE
-                    //string privateInputParameters = "" 
+                    //string privateInputParameters = ""
 
-                    //string privateEndpoint = "QueryOrders" 
-                    //string privateInputParameters = "txid=OFUSL6-GXIIT-KZ2JDJ" 
+                    //string privateEndpoint = "QueryOrders"
+                    //string privateInputParameters = "txid=OFUSL6-GXIIT-KZ2JDJ"
 
                     //string privateEndpoint = "AddOrder"
                     //string privateInputParameters = "pair=xdgusd&type=buy&ordertype=market&volume=5000"
 
                     //string privateEndpoint = "DepositAddresses"
-                    //string privateInputParameters = "asset=xbt&method=Bitcoin" 
+                    //string privateInputParameters = "asset=xbt&method=Bitcoin"
 
                     //string privateEndpoint = "DepositMethods"
-                    //string privateInputParameters = "asset=eth" 
+                    //string privateInputParameters = "asset=eth"
 
-                    //string privateEndpoint = "WalletTransfer" 
-                    //string privateInputParameters = "asset=xbt&to=Futures Wallet&from=Spot Wallet&amount=0.0045" 
+                    //string privateEndpoint = "WalletTransfer"
+                    //string privateInputParameters = "asset=xbt&to=Futures Wallet&from=Spot Wallet&amount=0.0045"
 
                     //string privateEndpoint = "TradesHistory"
-                    //string privateInputParameters = "start=1577836800&end=1609459200" 
+                    //string privateInputParameters = "start=1577836800&end=1609459200"
 
-                    //string privateEndpoint = "GetWebSocketsToken" 
-                    //string privateInputParameters = "" 
+                    //string privateEndpoint = "GetWebSocketsToken"
+                    //string privateInputParameters = ""
 
                     //*
-
 
                     privateResponse = await QueryPrivateEndpoint(privateEndpoint,
                                                                  privateInputParameters,
                                                                  apiPublicKey,
                                                                  apiPrivateKey);
                     System.Console.WriteLine(privateResponse);
-
                 }
 
-                #endregion
+                #endregion Private REST API Examples
 
                 #region Public WebSocket API Examples
 
@@ -137,7 +130,7 @@ namespace KrakenCSharpExampleConsole
 
                 //}
 
-                #endregion
+                #endregion Public WebSocket API Examples
 
                 #region Private WebSocket API Examples
 
@@ -145,7 +138,7 @@ namespace KrakenCSharpExampleConsole
                 //{
                 //    string privateWebSocketURL = "wss://ws-auth.kraken.com/";
 
-                //    //GET AND EXTRACT THE WEBSOCKET TOKEN FORM THE JSON RESPONSE               
+                //    //GET AND EXTRACT THE WEBSOCKET TOKEN FORM THE JSON RESPONSE
                 //    string webSocketRestResponseJSON = await QueryPrivateEndpoint("GetWebSocketsToken", "", apiPublicKey, apiPrivateKey);
 
                 //    var splits = webSocketRestResponseJSON.Split(new string[] { "\"token\":\"", "\"}}" }, StringSplitOptions.None);
@@ -172,7 +165,7 @@ namespace KrakenCSharpExampleConsole
 
                 //}
 
-                #endregion
+                #endregion Private WebSocket API Examples
 
                 System.Console.WriteLine();
                 System.Console.WriteLine("|=========================================|");
@@ -186,7 +179,6 @@ namespace KrakenCSharpExampleConsole
                 System.Console.WriteLine("AN EXCEPTION OCCURED :(");
                 System.Console.WriteLine(e.ToString());
             }
-
         }
 
         #region Public REST API Endpoints
@@ -204,7 +196,7 @@ namespace KrakenCSharpExampleConsole
             return jsonData;
         }
 
-        #endregion
+        #endregion Public REST API Endpoints
 
         #region Private REST API Endpoints
 
@@ -243,7 +235,7 @@ namespace KrakenCSharpExampleConsole
             return jsonData;
         }
 
-        #endregion
+        #endregion Private REST API Endpoints
 
         #region Authentication Algorithm
 
@@ -277,7 +269,6 @@ namespace KrakenCSharpExampleConsole
                                                 string nonce,
                                                 string inputParams)
         {
-
             string apiEndpointPath = apiPath + endpointName;
             byte[] apiEndpointPathBytes = Encoding.UTF8.GetBytes(apiEndpointPath);
             byte[] sha512HashData = apiEndpointPathBytes.Concat(sha256Hash).ToArray();
@@ -286,7 +277,7 @@ namespace KrakenCSharpExampleConsole
             return sha512Hash;
         }
 
-        #endregion
+        #endregion Authentication Algorithm
 
         #region WebSocket API
 
@@ -318,7 +309,7 @@ namespace KrakenCSharpExampleConsole
         //            await ReceiveMessage(webSocketClient, stoppingToken.Token);
         //        } while (webSocketClient.State == WebSocketState.Open);
 
-        //        //CLOSE CONNECTION 
+        //        //CLOSE CONNECTION
         //        await webSocketClient.CloseOutputAsync(WebSocketCloseStatus.NormalClosure, "", stoppingToken.Token);
         //    }
         //    catch (OperationCanceledException)
@@ -336,7 +327,6 @@ namespace KrakenCSharpExampleConsole
         //    var buffer = new ArraySegment<byte>(new byte[2048]);
         //    while (!stoppingToken.IsCancellationRequested)
         //    {
-
         //        WebSocketReceiveResult result;
         //        using (var ms = new MemoryStream())
         //        {
@@ -363,7 +353,6 @@ namespace KrakenCSharpExampleConsole
         //    };
         //}
 
-        #endregion
-
+        #endregion WebSocket API
     }
 }

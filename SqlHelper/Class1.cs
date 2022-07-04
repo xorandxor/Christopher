@@ -24,7 +24,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Xml;
 
-namespace must
+namespace DataBase
 {
     /// <summary>
     /// The SqlHelper class is intended to encapsulate high performance, scalable best practices for

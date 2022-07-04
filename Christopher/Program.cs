@@ -12,6 +12,11 @@ namespace Test
         {
             Program p = new Program();
             p.Run(args);
+            while (1 == 1)
+            {
+                System.Threading.Thread.Sleep(1000);
+                Console.Write(DateTime.Now.ToString());
+            }
         }
 
         private void Run(string[] args)
