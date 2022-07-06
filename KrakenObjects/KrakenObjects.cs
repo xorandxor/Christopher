@@ -3,7 +3,9 @@
     public class OHLC
     {
     }
-
+    /// <summary>
+    /// class to hold ticker data from the kraken api
+    /// </summary>
     public class Ticker
     {
         //Ask [<price>, <whole lot volume>, <lot volume>]
