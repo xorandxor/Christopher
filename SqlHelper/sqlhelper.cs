@@ -1,4 +1,7 @@
-﻿//===============================================================================
+﻿// muchos gracias to whoever i stole this from and also microsoft for
+// writing the original code, which makes it a snap to work 
+// with MSSQL databases - el gordo
+//===============================================================================
 // Microsoft Data Access Application Block for .NET
 // http://msdn.microsoft.com/library/en-us/dnbda/html/daab-rm.asp
 //
@@ -18,10 +21,7 @@
 // FITNESS FOR A PARTICULAR PURPOSE.
 //==============================================================================
 //
-// muchos gracias to whoever i stole this from and also microsoft for
-// writing the original code, which makes it a snap to work 
-// with MSSQL databases
-//
+
 using System;
 using System.Collections;
 using System.Data;
