@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("SqlHelper")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Microsoft Data Application Blocks for MSSQL Database")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("SqlHelper")]
