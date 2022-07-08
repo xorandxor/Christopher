@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace KrakenObjects
 {
+    /// <summary>
+    /// Self explanatory
+    /// </summary>
     public enum BuyOrSellType
     {
         Buy = 0,
@@ -81,5 +85,25 @@ namespace KrakenObjects
         public int UserRef { get => userRef; set => userRef = value; }
         public bool Validate { get => validate; set => validate = value; }
         public string Volume { get => volume; set => volume = value; }
+    
+    public async Task<bool> AddOrder()
+        {
+            bool result = false;
+
+            string privateEndpoint = "AddOrder";
+            string privateInputParameters = "pair=xdgeur&type=sell&ordertype=limit&volume=3000&price=%2b10.0%"; //Positive Percentage Example (%2 represtes +, which is a reseved character in HTTP)
+            string privateResponse = "";
+
+            privateResponse = await API.QueryPrivateEndpoint(privateEndpoint,
+                                                                privateInputParameters,
+                                                                apiPublicKey,
+                                                                apiPrivateKey);
+            System.Console.WriteLine(privateResponse);
+            return true;
+
+        }
+
+
+
     }
 }

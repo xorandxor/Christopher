@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="APIQueries.cs" />
     <Compile Include="Order.cs" />
     <Compile Include="Ticker.cs" />
     <Compile Include="OHLC.cs" />
