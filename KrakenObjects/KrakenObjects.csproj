@@ -51,5 +51,11 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AppSettingsManager\AppSettingsManager.csproj">
+      <Project>{4eb8d13c-8042-4d51-abc8-4779a9689acf}</Project>
+      <Name>AppSettingsManager</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

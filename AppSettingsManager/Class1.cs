@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System;
 using System.Configuration;
 
 namespace AppSettingsManager
@@ -45,18 +40,19 @@ namespace AppSettingsManager
                 }
             }
 
-            static void ReadSetting(string key)
+            public static string ReadSetting(string key)
             {
+            string result = "";
                 try
                 {
                     var appSettings = ConfigurationManager.AppSettings;
-                    string result = appSettings[key] ?? "Not Found";
-                    Console.WriteLine(result);
-                }
+                    result = appSettings[key] ?? "Not Found";
+                                    }
                 catch (ConfigurationErrorsException)
                 {
                     Console.WriteLine("Error reading app settings");
                 }
+            return result;
             }
 
             static void AddUpdateAppSettings(string key, string value)

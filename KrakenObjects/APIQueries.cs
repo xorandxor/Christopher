@@ -4,14 +4,13 @@ using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-
+using AppSettingsManager;
 namespace KrakenObjects
 {
     public class API
     {
-        private string apiPublicKey = "YOUR_PUBLIC_KEY";
-
-        private string apiPrivateKey = "YOUR_PRIVATE_KEY";
+        private string apiPublicKey = AppSettingsManager.AppSettings.ReadSetting("apiPublicKey");
+        private string apiPrivateKey = AppSettingsManager.AppSettings.ReadSetting("apiPrivateKey");
 
         #region Public REST API Endpoints
 
