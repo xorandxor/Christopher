@@ -7,8 +7,12 @@ using System.Threading.Tasks;
 
 namespace KrakenObjects
 {
-    public static class API
+    public class API
     {
+        private string apiPublicKey = "YOUR_PUBLIC_KEY";
+
+        private string apiPrivateKey = "YOUR_PRIVATE_KEY";
+
         #region Public REST API Endpoints
 
         private static async Task<string> QueryPublicEndpoint(string endpointName, string inputParameters)

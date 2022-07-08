@@ -44,6 +44,10 @@ namespace KrakenObjects
 
     public class Order
     {
+        private string apiPublicKey = "YOUR_PUBLIC_KEY";
+
+        private string apiPrivateKey = "YOUR_PRIVATE_KEY";
+
         private KrakenCloseOrderType closeOrderType = KrakenCloseOrderType.StopLoss;
         private string closePrice = "";
         private String closePrice2 = "";
