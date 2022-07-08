@@ -5,8 +5,14 @@ namespace Test
 {
     internal class Program
     {
+        #region Private Fields
+
         private static string bitmexKey = "API_KEY";
         private static string bitmexSecret = "API_SECRET";
+
+        #endregion Private Fields
+
+        #region Private Methods
 
         private static void Main(string[] args)
         {
@@ -27,5 +33,7 @@ namespace Test
             // var orders = bitmex.DeleteOrders();
             Console.WriteLine(orders);
         }
+
+        #endregion Private Methods
     }
 }

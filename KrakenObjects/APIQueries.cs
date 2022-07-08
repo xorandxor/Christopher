@@ -4,32 +4,31 @@ using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-using AppSettingsManager;
+
 namespace KrakenObjects
 {
     public class API
     {
-        private string apiPublicKey = AppSettingsManager.AppSettings.ReadSetting("apiPublicKey");
+        #region Private Fields
+
         private string apiPrivateKey = AppSettingsManager.AppSettings.ReadSetting("apiPrivateKey");
+        private string apiPublicKey = AppSettingsManager.AppSettings.ReadSetting("apiPublicKey");
 
-        #region Public REST API Endpoints
+        #endregion Private Fields
 
-        private static async Task<string> QueryPublicEndpoint(string endpointName, string inputParameters)
+        #region Public Methods
+
+        public static string CreateAuthenticationSignature(string apiPrivateKey,
+                                                           string apiPath,
+                                                           string endpointName,
+                                                           string nonce,
+                                                           string inputParams)
         {
-            string jsonData;
-            string baseDomain = "https://api.kraken.com";
-            string publicPath = "/0/public/";
-            string apiEndpointFullURL = baseDomain + publicPath + endpointName + "?" + inputParameters;
-            using (HttpClient client = new HttpClient())
-            {
-                jsonData = await client.GetStringAsync(apiEndpointFullURL);
-            }
-            return jsonData;
+            byte[] sha256Hash = ComputeSha256Hash(nonce, inputParams);
+            byte[] sha512Hash = ComputeSha512Hash(apiPrivateKey, sha256Hash, apiPath, endpointName, nonce, inputParams);
+            string signatureString = Convert.ToBase64String(sha512Hash);
+            return signatureString;
         }
-
-        #endregion Public REST API Endpoints
-
-        #region private REST API Endpoints
 
         public static async Task<string> QueryPrivateEndpoint(string endpointName,
                                                                string inputParameters,
@@ -66,21 +65,9 @@ namespace KrakenObjects
             return jsonData;
         }
 
-        #endregion private REST API Endpoints
+        #endregion Public Methods
 
-        #region Authentication Algorithm
-
-        public static string CreateAuthenticationSignature(string apiPrivateKey,
-                                                           string apiPath,
-                                                           string endpointName,
-                                                           string nonce,
-                                                           string inputParams)
-        {
-            byte[] sha256Hash = ComputeSha256Hash(nonce, inputParams);
-            byte[] sha512Hash = ComputeSha512Hash(apiPrivateKey, sha256Hash, apiPath, endpointName, nonce, inputParams);
-            string signatureString = Convert.ToBase64String(sha512Hash);
-            return signatureString;
-        }
+        #region Private Methods
 
         private static byte[] ComputeSha256Hash(string nonce, string inputParams)
         {
@@ -108,6 +95,19 @@ namespace KrakenObjects
             return sha512Hash;
         }
 
-        #endregion Authentication Algorithm
+        private static async Task<string> QueryPublicEndpoint(string endpointName, string inputParameters)
+        {
+            string jsonData;
+            string baseDomain = "https://api.kraken.com";
+            string publicPath = "/0/public/";
+            string apiEndpointFullURL = baseDomain + publicPath + endpointName + "?" + inputParameters;
+            using (HttpClient client = new HttpClient())
+            {
+                jsonData = await client.GetStringAsync(apiEndpointFullURL);
+            }
+            return jsonData;
+        }
+
+        #endregion Private Methods
     }
 }

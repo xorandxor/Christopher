@@ -9,29 +9,58 @@ namespace Christopher
 {
     public class krakenapi
     {
-        //TODO: UPDATE WITH YOUR KEYS :)
-        private string apiPublicKey = "YOUR_PUBLIC_KEY";
+        #region Private Fields
 
         private string apiPrivateKey = "YOUR_PRIVATE_KEY";
 
-        #region Public REST API Endpoints
+        //TODO: UPDATE WITH YOUR KEYS :)
+        private string apiPublicKey = "YOUR_PUBLIC_KEY";
 
-        private static async Task<string> QueryPublicEndpoint(string endpointName, string inputParameters)
+        #endregion Private Fields
+
+        #region Public Methods
+
+        public static string CreateAuthenticationSignature(string apiPrivateKey,
+                                                           string apiPath,
+                                                           string endpointName,
+                                                           string nonce,
+                                                           string inputParams)
         {
-            string jsonData;
-            string baseDomain = "https://api.kraken.com";
-            string publicPath = "/0/public/";
-            string apiEndpointFullURL = baseDomain + publicPath + endpointName + "?" + inputParameters;
-            using (HttpClient client = new HttpClient())
-            {
-                jsonData = await client.GetStringAsync(apiEndpointFullURL);
-            }
-            return jsonData;
+            byte[] sha256Hash = ComputeSha256Hash(nonce, inputParams);
+            byte[] sha512Hash = ComputeSha512Hash(apiPrivateKey, sha256Hash, apiPath, endpointName, nonce, inputParams);
+            string signatureString = Convert.ToBase64String(sha512Hash);
+            return signatureString;
         }
 
-        #endregion Public REST API Endpoints
+        #endregion Public Methods
 
-        #region Private REST API Endpoints
+        #region Private Methods
+
+        private static byte[] ComputeSha256Hash(string nonce, string inputParams)
+        {
+            byte[] sha256Hash;
+            string sha256HashData = nonce.ToString() + "nonce=" + nonce.ToString() + inputParams;
+            using (var sha = SHA256.Create())
+            {
+                sha256Hash = sha.ComputeHash(Encoding.UTF8.GetBytes(sha256HashData));
+            }
+            return sha256Hash;
+        }
+
+        private static byte[] ComputeSha512Hash(string apiPrivateKey,
+                                                byte[] sha256Hash,
+                                                string apiPath,
+                                                string endpointName,
+                                                string nonce,
+                                                string inputParams)
+        {
+            string apiEndpointPath = apiPath + endpointName;
+            byte[] apiEndpointPathBytes = Encoding.UTF8.GetBytes(apiEndpointPath);
+            byte[] sha512HashData = apiEndpointPathBytes.Concat(sha256Hash).ToArray();
+            HMACSHA512 encryptor = new HMACSHA512(Convert.FromBase64String(apiPrivateKey));
+            byte[] sha512Hash = encryptor.ComputeHash(sha512HashData);
+            return sha512Hash;
+        }
 
         private static async Task<string> QueryPrivateEndpoint(string endpointName,
                                                                string inputParameters,
@@ -68,48 +97,19 @@ namespace Christopher
             return jsonData;
         }
 
-        #endregion Private REST API Endpoints
-
-        #region Authentication Algorithm
-
-        public static string CreateAuthenticationSignature(string apiPrivateKey,
-                                                           string apiPath,
-                                                           string endpointName,
-                                                           string nonce,
-                                                           string inputParams)
+        private static async Task<string> QueryPublicEndpoint(string endpointName, string inputParameters)
         {
-            byte[] sha256Hash = ComputeSha256Hash(nonce, inputParams);
-            byte[] sha512Hash = ComputeSha512Hash(apiPrivateKey, sha256Hash, apiPath, endpointName, nonce, inputParams);
-            string signatureString = Convert.ToBase64String(sha512Hash);
-            return signatureString;
-        }
-
-        private static byte[] ComputeSha256Hash(string nonce, string inputParams)
-        {
-            byte[] sha256Hash;
-            string sha256HashData = nonce.ToString() + "nonce=" + nonce.ToString() + inputParams;
-            using (var sha = SHA256.Create())
+            string jsonData;
+            string baseDomain = "https://api.kraken.com";
+            string publicPath = "/0/public/";
+            string apiEndpointFullURL = baseDomain + publicPath + endpointName + "?" + inputParameters;
+            using (HttpClient client = new HttpClient())
             {
-                sha256Hash = sha.ComputeHash(Encoding.UTF8.GetBytes(sha256HashData));
+                jsonData = await client.GetStringAsync(apiEndpointFullURL);
             }
-            return sha256Hash;
+            return jsonData;
         }
 
-        private static byte[] ComputeSha512Hash(string apiPrivateKey,
-                                                byte[] sha256Hash,
-                                                string apiPath,
-                                                string endpointName,
-                                                string nonce,
-                                                string inputParams)
-        {
-            string apiEndpointPath = apiPath + endpointName;
-            byte[] apiEndpointPathBytes = Encoding.UTF8.GetBytes(apiEndpointPath);
-            byte[] sha512HashData = apiEndpointPathBytes.Concat(sha256Hash).ToArray();
-            HMACSHA512 encryptor = new HMACSHA512(Convert.FromBase64String(apiPrivateKey));
-            byte[] sha512Hash = encryptor.ComputeHash(sha512HashData);
-            return sha512Hash;
-        }
-
-        #endregion Authentication Algorithm
+        #endregion Private Methods
     }
 }

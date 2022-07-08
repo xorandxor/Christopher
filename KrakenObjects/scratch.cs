@@ -1,12 +1,19 @@
-﻿
-public class Rootobject
+﻿public class Result
 {
-    public object[] error { get; set; }
-    public Result result { get; set; }
+    #region Public Properties
+
+    public string last { get; set; }
+    public object[][] XXBTZUSD { get; set; }
+
+    #endregion Public Properties
 }
 
-public class Result
+public class Rootobject
 {
-    public object[][] XXBTZUSD { get; set; }
-    public string last { get; set; }
+    #region Public Properties
+
+    public object[] error { get; set; }
+    public Result result { get; set; }
+
+    #endregion Public Properties
 }

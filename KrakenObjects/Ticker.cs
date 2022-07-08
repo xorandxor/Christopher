@@ -1,11 +1,12 @@
 ﻿namespace Kraken
 {
-   
     /// <summary>
     /// class to hold ticker data from the kraken api
     /// </summary>
     public class Ticker
     {
+        #region Private Fields
+
         //Ask [<price>, <whole lot volume>, <lot volume>]
         private string[] ask = new string[3];
 
@@ -42,6 +43,10 @@
         //Volume weighted average price [<today>, <last 24 hours>]
         private string[] volumeWeightedAveragePrice = new string[2];
 
+        #endregion Private Fields
+
+        #region Public Constructors
+
         public Ticker()
         { }
 
@@ -68,6 +73,10 @@
             this.Open = pOpen;
         }
 
+        #endregion Public Constructors
+
+        #region Public Properties
+
         public string[] Ask { get => ask; set => ask = value; }
         public string AssetPair { get => assetPair; set => assetPair = value; }
         public string[] Bid { get => bid; set => bid = value; }
@@ -80,5 +89,7 @@
         public string Open { get => open; set => open = value; }
         public string[] Volume { get => volume; set => volume = value; }
         public string[] VolumeWeightedAveragePrice { get => volumeWeightedAveragePrice; set => volumeWeightedAveragePrice = value; }
+
+        #endregion Public Properties
     }
 }

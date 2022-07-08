@@ -9,10 +9,22 @@ namespace Monitor
 {
     public partial class Form1 : Form
     {
+        #region Private Fields
+
+        private int t = 0;
+
+        #endregion Private Fields
+
+        #region Public Constructors
+
         public Form1()
         {
             InitializeComponent();
         }
+
+        #endregion Public Constructors
+
+        #region Private Methods
 
         private void btnStart_Click(object sender, EventArgs e)
         {
@@ -29,22 +41,6 @@ namespace Monitor
                 timer.Enabled = false;
                 lblTimerState.Text = "Timer Stopped";
                 btnStart.Text = "Start Timer";
-            }
-        }
-
-        private int t = 0;
-
-        private void timer_Tick(object sender, EventArgs e)
-        {
-            t++;
-            lblTimerInfo.Text = t.ToString() + " Seconds";
-
-            if (t == 10)
-            {
-                timer.Enabled = false;
-                CheckStatus();
-                t = 0;
-                timer.Enabled = true;
             }
         }
 
@@ -131,5 +127,21 @@ namespace Monitor
 
             SqlHelper.ExecuteNonQuery(dbconn, CommandType.StoredProcedure, "ResponseTime_INSERT", parms);
         }
+
+        private void timer_Tick(object sender, EventArgs e)
+        {
+            t++;
+            lblTimerInfo.Text = t.ToString() + " Seconds";
+
+            if (t == 10)
+            {
+                timer.Enabled = false;
+                CheckStatus();
+                t = 0;
+                timer.Enabled = true;
+            }
+        }
+
+        #endregion Private Methods
     }
 }

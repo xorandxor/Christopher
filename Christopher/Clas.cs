@@ -9,29 +9,95 @@ using System.Threading;
 
 namespace BitMEX
 {
-    public class OrderBookItem
-    {
-        public string Symbol { get; set; }
-        public int Level { get; set; }
-        public int BidSize { get; set; }
-        public decimal BidPrice { get; set; }
-        public int AskSize { get; set; }
-        public decimal AskPrice { get; set; }
-        public DateTime Timestamp { get; set; }
-    }
-
     public class BitMEXApi
     {
+        #region Private Fields
+
         private const string domain = "https://testnet.bitmex.com";
         private string apiKey;
         private string apiSecret;
+        private long lastTicks = 0;
         private int rateLimit;
+
+        private object thisLock = new object();
+
+        #endregion Private Fields
+
+        #region Public Constructors
 
         public BitMEXApi(string bitmexKey = "", string bitmexSecret = "", int rateLimit = 5000)
         {
             this.apiKey = bitmexKey;
             this.apiSecret = bitmexSecret;
             this.rateLimit = rateLimit;
+        }
+
+        #endregion Public Constructors
+
+        #region Public Methods
+
+        public static string ByteArrayToString(byte[] ba)
+        {
+            StringBuilder hex = new StringBuilder(ba.Length * 2);
+            foreach (byte b in ba)
+                hex.AppendFormat("{0:x2}", b);
+            return hex.ToString();
+        }
+
+        public string DeleteOrders()
+        {
+            var param = new Dictionary<string, string>();
+            param["orderID"] = "de709f12-2f24-9a36-b047-ab0ff090f0bb";
+            param["text"] = "cancel order by ID";
+            return Query("DELETE", "/order", param, true, true);
+        }
+
+        public string GetOrders()
+        {
+            var param = new Dictionary<string, string>();
+            param["symbol"] = "XBTUSD";
+            //param["filter"] = "{\"open\":true}";
+            //param["columns"] = "";
+            //param["count"] = 100.ToString();
+            //param["start"] = 0.ToString();
+            //param["reverse"] = false.ToString();
+            //param["startTime"] = "";
+            //param["endTime"] = "";
+            return Query("GET", "/order", param, true);
+        }
+
+        //public List<OrderBookItem> GetOrderBook(string symbol, int depth)
+        //{
+        //    var param = new Dictionary<string, string>();
+        //    param["symbol"] = symbol;
+        //    param["depth"] = depth.ToString();
+        //    string res = Query("GET", "/orderBook", param);
+        //    return JsonSerializer.DeserializeFromString<List<OrderBookItem>>(res);
+        //}
+        public string PostOrders()
+        {
+            var param = new Dictionary<string, string>();
+            param["symbol"] = "XBTUSD";
+            param["side"] = "Buy";
+            param["orderQty"] = "1";
+            param["ordType"] = "Market";
+            return Query("POST", "/order", param, true);
+        }
+
+        #endregion Public Methods
+
+        #region Private Methods
+
+        private string BuildJSON(Dictionary<string, string> param)
+        {
+            if (param == null)
+                return "";
+
+            var entries = new List<string>();
+            foreach (var item in param)
+                entries.Add(string.Format("\"{0}\":\"{1}\"", item.Key, item.Value));
+
+            return "{" + string.Join(",", entries) + "}";
         }
 
         private string BuildQueryData(Dictionary<string, string> param)
@@ -47,29 +113,17 @@ namespace BitMEX
             catch (Exception) { return ""; }
         }
 
-        private string BuildJSON(Dictionary<string, string> param)
-        {
-            if (param == null)
-                return "";
-
-            var entries = new List<string>();
-            foreach (var item in param)
-                entries.Add(string.Format("\"{0}\":\"{1}\"", item.Key, item.Value));
-
-            return "{" + string.Join(",", entries) + "}";
-        }
-
-        public static string ByteArrayToString(byte[] ba)
-        {
-            StringBuilder hex = new StringBuilder(ba.Length * 2);
-            foreach (byte b in ba)
-                hex.AppendFormat("{0:x2}", b);
-            return hex.ToString();
-        }
-
         private long GetExpires()
         {
             return DateTimeOffset.UtcNow.ToUnixTimeSeconds() + 3600; // set expires one hour in the future
+        }
+
+        private byte[] hmacsha256(byte[] keyByte, byte[] messageBytes)
+        {
+            using (var hash = new HMACSHA256(keyByte))
+            {
+                return hash.ComputeHash(messageBytes);
+            }
         }
 
         private string Query(string method, string function, Dictionary<string, string> param = null, bool auth = false, bool json = false)
@@ -130,60 +184,6 @@ namespace BitMEX
             }
         }
 
-        //public List<OrderBookItem> GetOrderBook(string symbol, int depth)
-        //{
-        //    var param = new Dictionary<string, string>();
-        //    param["symbol"] = symbol;
-        //    param["depth"] = depth.ToString();
-        //    string res = Query("GET", "/orderBook", param);
-        //    return JsonSerializer.DeserializeFromString<List<OrderBookItem>>(res);
-        //}
-
-        public string GetOrders()
-        {
-            var param = new Dictionary<string, string>();
-            param["symbol"] = "XBTUSD";
-            //param["filter"] = "{\"open\":true}";
-            //param["columns"] = "";
-            //param["count"] = 100.ToString();
-            //param["start"] = 0.ToString();
-            //param["reverse"] = false.ToString();
-            //param["startTime"] = "";
-            //param["endTime"] = "";
-            return Query("GET", "/order", param, true);
-        }
-
-        public string PostOrders()
-        {
-            var param = new Dictionary<string, string>();
-            param["symbol"] = "XBTUSD";
-            param["side"] = "Buy";
-            param["orderQty"] = "1";
-            param["ordType"] = "Market";
-            return Query("POST", "/order", param, true);
-        }
-
-        public string DeleteOrders()
-        {
-            var param = new Dictionary<string, string>();
-            param["orderID"] = "de709f12-2f24-9a36-b047-ab0ff090f0bb";
-            param["text"] = "cancel order by ID";
-            return Query("DELETE", "/order", param, true, true);
-        }
-
-        private byte[] hmacsha256(byte[] keyByte, byte[] messageBytes)
-        {
-            using (var hash = new HMACSHA256(keyByte))
-            {
-                return hash.ComputeHash(messageBytes);
-            }
-        }
-
-        #region RateLimiter
-
-        private long lastTicks = 0;
-        private object thisLock = new object();
-
         private void RateLimit()
         {
             lock (thisLock)
@@ -196,6 +196,21 @@ namespace BitMEX
             }
         }
 
-        #endregion RateLimiter
+        #endregion Private Methods
+    }
+
+    public class OrderBookItem
+    {
+        #region Public Properties
+
+        public decimal AskPrice { get; set; }
+        public int AskSize { get; set; }
+        public decimal BidPrice { get; set; }
+        public int BidSize { get; set; }
+        public int Level { get; set; }
+        public string Symbol { get; set; }
+        public DateTime Timestamp { get; set; }
+
+        #endregion Public Properties
     }
 }

@@ -44,10 +44,10 @@ namespace KrakenObjects
 
     public class Order
     {
-        private string apiPublicKey = "YOUR_PUBLIC_KEY";
+        #region Private Fields
 
         private string apiPrivateKey = "YOUR_PRIVATE_KEY";
-
+        private string apiPublicKey = "YOUR_PUBLIC_KEY";
         private KrakenCloseOrderType closeOrderType = KrakenCloseOrderType.StopLoss;
         private string closePrice = "";
         private String closePrice2 = "";
@@ -68,8 +68,16 @@ namespace KrakenObjects
 
         private string volume = "";
 
+        #endregion Private Fields
+
+        #region Public Constructors
+
         public Order()
         { }
+
+        #endregion Public Constructors
+
+        #region Public Properties
 
         public KrakenCloseOrderType CloseOrderType { get => closeOrderType; set => closeOrderType = value; }
         public string ClosePrice { get => closePrice; set => closePrice = value; }
@@ -89,8 +97,12 @@ namespace KrakenObjects
         public int UserRef { get => userRef; set => userRef = value; }
         public bool Validate { get => validate; set => validate = value; }
         public string Volume { get => volume; set => volume = value; }
-    
-    public async Task<bool> AddOrder()
+
+        #endregion Public Properties
+
+        #region Public Methods
+
+        public async Task<bool> AddOrder()
         {
             bool result = false;
 
@@ -104,10 +116,8 @@ namespace KrakenObjects
                                                                 apiPrivateKey);
             System.Console.WriteLine(privateResponse);
             return true;
-
         }
 
-
-
+        #endregion Public Methods
     }
 }
