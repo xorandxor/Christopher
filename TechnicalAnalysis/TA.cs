@@ -18,19 +18,19 @@ namespace Kraken
     {
         public static string GetRSI()
         {
-            string x = "the_jew_with_no_other_info";
+            string x = "";
             return x;
         }
         public static string GetPriceAccelDecel()
         {
-            string x = "the_jew_with_no_other_info";
+            string x = "";
             return x;
 
         }
 
         public static string GetVolumeChange()
         {
-            string x = "the_jew_with_no_other_info";
+            string x = "";
             return x;
 
         }
