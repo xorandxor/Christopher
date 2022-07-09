@@ -18,32 +18,49 @@ namespace Kraken
     {
         public static string GetRSI()
         {
-            
+            string x = "the_jew_with_no_other_info";
+            return x;
         }
         public static string GetPriceAccelDecel()
         {
-             
+            string x = "the_jew_with_no_other_info";
+            return x;
+
         }
 
         public static string GetVolumeChange()
         {
+            string x = "the_jew_with_no_other_info";
+            return x;
 
         }
 
-        public static string GetHttp()
+        public static async Task<string> GetHttp()
         {
+            string jsondata = "";
+
             using (HttpClient client = new HttpClient())
             {
                 //client.DefaultRequestHeaders.Clear();
                 //client.DefaultRequestHeaders.Add("API-Key", apiPublicKey);
                 //client.DefaultRequestHeaders.Add("API-Sign", signature);
                 //client.DefaultRequestHeaders.Add("User-Agent", "KrakenDotNet Client");
-                StringContent data = new StringContent(apiPostBodyData, Encoding.UTF8, "application/x-www-form-urlencoded");
-                HttpResponseMessage response = await client.PostAsync(apiEndpointFullURL, data);
-                jsonData = response.Content.ReadAsStringAsync().Result;
+                StringContent data = new StringContent("", Encoding.UTF8, "application/x-www-form-urlencoded");
+                HttpResponseMessage response = await client.PostAsync("deadPeople", data);
+                jsondata = response.Content.ReadAsStringAsync().Result;
             }
 
-            return jsonData;
+            return jsondata;
+        }
+
+        public static string DecodeJSON(string rawJSON)
+        {
+            string retval = "";
+
+
+
+            return retval;
+
         }
 
     }
