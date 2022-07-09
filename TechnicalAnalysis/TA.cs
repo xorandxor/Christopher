@@ -22,7 +22,7 @@ namespace Kraken
         }
         public static string GetPriceAccelDecel()
         {
-
+             
         }
 
         public static string GetVolumeChange()
