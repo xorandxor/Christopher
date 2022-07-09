@@ -60,6 +60,7 @@ namespace KrakenObjects
                 StringContent data = new StringContent(apiPostBodyData, Encoding.UTF8, "application/x-www-form-urlencoded");
                 HttpResponseMessage response = await client.PostAsync(apiEndpointFullURL, data);
                 jsonData = response.Content.ReadAsStringAsync().Result;
+
             }
 
             return jsonData;
