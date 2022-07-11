@@ -1,41 +1,27 @@
-﻿using System;
-using System.Linq;
-using System.Net.Http;
-using System.Security.Cryptography;
+﻿using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Kraken
 {
+    public enum TradeAdvice
+    {
+        Buy = 0,
+        Neutral = 1,
+        Sell = 2
+    }
 
-    /// <summary>
-    /// Perform Technical Analysis On Kraken Crypto Exchange
+    /// <summary> Perform Technical Analysis On Kraken Crypto Exchange 
     /// MACD https://api.coin-ta.com/macd?key=lpeiMu4nO3xvSk1&backtracks=5&exchange=kraken&symbol=xbtusdt&interval=15m&fastPeriod=12&slowPeriod=26&signalPeriod=9
-    /// RSI https://api.coin-ta.com/rsi?key=lpeiMu4nO3xvSk1&backtracks=15&exchange=kraken&symbol=xbtusd&interval=15m
-    /// OHLC Data https://api.kraken.com/0/public/OHLC?pair=XBTUSD (gives volume +- as well as last three candle sticks)
-    /// </summary>
+    /// RSI  https://api.coin-ta.com/rsi?key=lpeiMu4nO3xvSk1&backtracks=15&exchange=kraken&symbol=xbtusd&interval=15m
+    /// OHLC https://api.kraken.com/0/public/OHLC?pair=XBTUSD (gives volume +- as well as last
+    /// three candle sticks) </summary>
     public static class TechnicalAnalysis
     {
-        public static string GetRSI()
-        {
-            string x = "";
-            return x;
-        }
-        public static string GetPriceAccelDecel()
-        {
-            string x = "";
-            return x;
+        #region Public Methods
 
-        }
-
-        public static string GetVolumeChange()
-        {
-            string x = "";
-            return x;
-
-        }
-
-        public static async Task<string> GetHttp()
+       
+        public static async Task<string> GetHttp(string URL)
         {
             string jsondata = "";
 
@@ -53,18 +39,29 @@ namespace Kraken
             return jsondata;
         }
 
-        public static string DecodeJSON(string rawJSON)
+        public static TradeAdvice GetPriceAccelDecel()
         {
-            string retval = "";
-
-
-
-            return retval;
-
+            TradeAdvice t = TradeAdvice.Neutral;
+            
+            return t;
         }
 
+        /// <summary> If RSI > 70 sell | IF RSI < 30 buy | IF RSI 30-70 neutral </summary> 
+        /// <returns>TradeAdvice</returns>
+        public static TradeAdvice GetRSI()
+        {
+            TradeAdvice t = TradeAdvice.Neutral;
+
+            return t;
+        }
+
+        public static TradeAdvice GetVolumeChange()
+        {
+            TradeAdvice t = TradeAdvice.Neutral;
+
+            return t;
+        }
+
+        #endregion Public Methods
     }
-
-
-
 }
