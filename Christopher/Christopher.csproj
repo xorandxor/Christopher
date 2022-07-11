@@ -45,7 +45,6 @@
   <ItemGroup>
     <Compile Include="kraken.cs" />
     <Compile Include="krakenapi.cs" />
-    <Compile Include="Logging.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

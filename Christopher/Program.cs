@@ -17,26 +17,22 @@ namespace Kraken
 
         private static void Main(string[] args)
         {
-            Program p = new Program();
-            p.Run(args);
-            //while (1 == 1)
-            //{
-            //    System.Threading.Thread.Sleep(1000);
-            //    Console.Write(DateTime.Now.ToString());
-            //}
+            string headerline = 
+                "*************************************************************************\n";
+            headerline +=
+                "*** Christopher Trading System Start\n";
+            headerline +=
+                "*************************************************************************\n";
+
+            Logging.Log(AppSettings.ReadSetting("LOGFILE"), headerline, false);
             TradeAdvice ta = TradeAdvice.Neutral;
-           ta = TechnicalAnalysis.GetRSI();
+            string j = AppSettings.ReadSetting("test");
+            Logging.Log(AppSettings.ReadSetting("LOGFILE"), "this is the first log entry", true);
+            ta = TechnicalAnalysis.GetRSI();
             object x = new object();
         }
 
-        private void Run(string[] args)
-        {
-            //BitMEXApi bitmex = new BitMEXApi(bitmexKey, bitmexSecret);
-            // var orderBook = bitmex.GetOrderBook("XBTUSD", 3);
-            //var orders = bitmex.GetOrders();
-            //var orders = bitmex.DeleteOrders();
-            //Console.WriteLine(orders);
-        }
+       
 
         #endregion Private Methods
     }

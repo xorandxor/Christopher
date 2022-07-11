@@ -39,9 +39,9 @@ namespace KrakenObjects
                 }
             }
             double res = Math.Round((double)DateTime.Now.Subtract(start).TotalMilliseconds,2);
-            string debugmessage = "http request for [" + URL + "] completed in " + res.ToString() + " ms.";
+            string debugmessage = "http request for [" + URL + "] completed in [" + res.ToString() + " ms.]";
 
-            Logging.Log("","",true);
+            Logging.Log(AppSettings.ReadSetting("LOGFILE"),debugmessage,true);
             return jsondata;
         }
 
@@ -59,10 +59,33 @@ namespace KrakenObjects
             TradeAdvice t = TradeAdvice.Neutral;
 
             string jsonData =  GetHttp("https://api.coin-ta.com/rsi?key=lpeiMu4nO3xvSk1&backtracks=1&exchange=kraken&symbol=xbtusd&interval=5m");
+
+            //looks like:
             //{"currentPrice":21031.70000,"results":[{"value":40.449395411680137062618688420,"backtrack":0}]}
-            //JsonConverter jsonConverter = new ;
-            // string x = "";
-            // x = jsonConverter.ReadJson(jsonData,String).ToString();
+            string _tmp = jsonData;
+            double val = 0;
+            if (jsonData.Contains("value"))
+            {
+                _tmp = _tmp.Substring(jsonData.IndexOf("value") + 7, 10);
+                val = Convert.ToDouble(_tmp);
+                Logging.Log(AppSettings.ReadSetting("LOGFILE"), "RSI value is :" + val.ToString(),true);
+            }
+            else
+            {
+                Logging.Log(AppSettings.ReadSetting("LOGFILE"),"Could not parse web response for RSI - response was [" + jsonData + "]",true);
+            }
+            if(val < 30) //oversold
+            {
+                t = TradeAdvice.Buy;
+            }
+            if (val > 30 & val < 70) // golden zone
+            {
+                t = TradeAdvice.Neutral;
+            }
+            if (val > 70) //overbought
+            {
+                t = TradeAdvice.Sell;
+            }
 
             return t;
         }

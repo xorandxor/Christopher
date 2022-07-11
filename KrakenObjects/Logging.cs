@@ -18,15 +18,15 @@ namespace KrakenObjects
             string fileName = file;
             try
             {
-                using (StreamWriter writer = new StreamWriter(fileName))
+                using (StreamWriter writer = new StreamWriter(fileName,true))
                 {
                     if(timestamp)
                     {
-                        writer.Write(DateTime.Now.ToString() + " -- " + message);
+                        writer.WriteLine(DateTime.Now.ToString() + " -- " + message);
                     }
                     else
                     {
-                        writer.Write(message);
+                        writer.WriteLine(message);
                     }
                     writer.Close();
                     writer.Dispose();
