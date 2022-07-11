@@ -1,4 +1,4 @@
-﻿namespace Kraken
+﻿namespace KrakenObjects
 {
     /// <summary>
     /// class to hold Open High Low Close Data from Kraken API

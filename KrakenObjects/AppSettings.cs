@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Configuration;
 
-namespace AppSettingsManager
+namespace KrakenObjects
 {
     public class AppSettings
     {

@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 
-namespace Logging
+namespace Kraken
 {
     public static class Logging
     {
@@ -38,7 +38,7 @@ namespace Logging
             }
 
         }
-        public void WriteToEventLog(string sLog, string sSource, string message, EventLogEntryType level)
+        public static void WriteToEventLog(string sLog, string sSource, string message, EventLogEntryType level)
         {
             if (!EventLog.SourceExists(sSource)) EventLog.CreateEventSource(sSource, sLog);
 

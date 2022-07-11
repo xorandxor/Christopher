@@ -5,14 +5,14 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Kraken
+namespace KrakenObjects
 {
     public class API
     {
         #region Private Fields
 
-        private string apiPrivateKey = AppSettingsManager.AppSettings.ReadSetting("apiPrivateKey");
-        private string apiPublicKey = AppSettingsManager.AppSettings.ReadSetting("apiPublicKey");
+        private string apiPrivateKey = AppSettings.ReadSetting("apiPrivateKey");
+        private string apiPublicKey = AppSettings.ReadSetting("apiPublicKey");
 
         #endregion Private Fields
 

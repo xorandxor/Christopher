@@ -1,8 +1,13 @@
-﻿using System.Net.Http;
+﻿using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
+using System.Runtime.Serialization;
+using Newtonsoft.Json;
+using System;
 
-namespace Kraken
+namespace KrakenObjects
 {
     public enum TradeAdvice
     {
@@ -21,21 +26,22 @@ namespace Kraken
         #region Public Methods
 
        
-        public static async Task<string> GetHttp(string URL)
+        public static string GetHttp(string URL)
         {
+            DateTime start = DateTime.Now;
             string jsondata = "";
-
-            using (HttpClient client = new HttpClient())
+            using (var client = new WebClient())
             {
-                //client.DefaultRequestHeaders.Clear();
-                //client.DefaultRequestHeaders.Add("API-Key", apiPublicKey);
-                //client.DefaultRequestHeaders.Add("API-Sign", signature);
-                //client.DefaultRequestHeaders.Add("User-Agent", "KrakenDotNet Client");
-                StringContent data = new StringContent("", Encoding.UTF8, "application/x-www-form-urlencoded");
-                HttpResponseMessage response = await client.PostAsync("deadPeople", data);
-                jsondata = response.Content.ReadAsStringAsync().Result;
+                string response = client.DownloadString(URL);
+                if (!string.IsNullOrEmpty(response))
+                {
+                    jsondata = response.ToString();
+                }
             }
+            double res = Math.Round((double)DateTime.Now.Subtract(start).TotalMilliseconds,2);
+            string debugmessage = "http request for [" + URL + "] completed in " + res.ToString() + " ms.";
 
+            Logging.Log("","",true);
             return jsondata;
         }
 
@@ -51,6 +57,12 @@ namespace Kraken
         public static TradeAdvice GetRSI()
         {
             TradeAdvice t = TradeAdvice.Neutral;
+
+            string jsonData =  GetHttp("https://api.coin-ta.com/rsi?key=lpeiMu4nO3xvSk1&backtracks=1&exchange=kraken&symbol=xbtusd&interval=5m");
+            //{"currentPrice":21031.70000,"results":[{"value":40.449395411680137062618688420,"backtrack":0}]}
+            //JsonConverter jsonConverter = new ;
+            // string x = "";
+            // x = jsonConverter.ReadJson(jsonData,String).ToString();
 
             return t;
         }

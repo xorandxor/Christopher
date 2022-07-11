@@ -43,9 +43,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Clas.cs" />
     <Compile Include="kraken.cs" />
     <Compile Include="krakenapi.cs" />
+    <Compile Include="Logging.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -53,6 +53,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\KrakenObjects\KrakenObjects.csproj">
+      <Project>{5ef970a3-8988-41b6-809e-e0f630db9f7c}</Project>
+      <Name>KrakenObjects</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SqlHelper\SqlHelper.csproj">
       <Project>{66065a62-0383-4293-a977-90acdc206ae1}</Project>
       <Name>SqlHelper</Name>

@@ -1,4 +1,4 @@
-﻿namespace Kraken
+﻿namespace KrakenObjects
 {
     /// <summary>
     /// class to hold ticker data from the kraken api

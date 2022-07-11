@@ -110,7 +110,7 @@ namespace KrakenObjects
             string privateInputParameters = "pair=xdgeur&type=sell&ordertype=limit&volume=3000&price=%2b10.0%"; //Positive Percentage Example (%2 represtes +, which is a reseved character in HTTP)
             string privateResponse = "";
 
-            privateResponse = await Kraken.API.QueryPrivateEndpoint(privateEndpoint,
+            privateResponse = await API.QueryPrivateEndpoint(privateEndpoint,
                                                                 privateInputParameters,
                                                                 apiPublicKey,
                                                                 apiPrivateKey);

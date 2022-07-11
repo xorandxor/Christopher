@@ -1,7 +1,8 @@
-﻿using BitMEX;
-using System;
+﻿using System;
+using Kraken;
+using KrakenObjects;
 
-namespace Test
+namespace Kraken
 {
     internal class Program
     {
@@ -18,20 +19,23 @@ namespace Test
         {
             Program p = new Program();
             p.Run(args);
-            while (1 == 1)
-            {
-                System.Threading.Thread.Sleep(1000);
-                Console.Write(DateTime.Now.ToString());
-            }
+            //while (1 == 1)
+            //{
+            //    System.Threading.Thread.Sleep(1000);
+            //    Console.Write(DateTime.Now.ToString());
+            //}
+            TradeAdvice ta = TradeAdvice.Neutral;
+           ta = TechnicalAnalysis.GetRSI();
+            object x = new object();
         }
 
         private void Run(string[] args)
         {
-            BitMEXApi bitmex = new BitMEXApi(bitmexKey, bitmexSecret);
+            //BitMEXApi bitmex = new BitMEXApi(bitmexKey, bitmexSecret);
             // var orderBook = bitmex.GetOrderBook("XBTUSD", 3);
-            var orders = bitmex.GetOrders();
-            // var orders = bitmex.DeleteOrders();
-            Console.WriteLine(orders);
+            //var orders = bitmex.GetOrders();
+            //var orders = bitmex.DeleteOrders();
+            //Console.WriteLine(orders);
         }
 
         #endregion Private Methods
