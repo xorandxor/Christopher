@@ -3,10 +3,23 @@ using System.Configuration;
 
 namespace Kraken
 {
+    /// <summary>
+    /// Class to read and write to the app.config this is used by config.cs which only exposes
+    /// predefined app settings to read from since there is no real need to write settings once the
+    /// app.config is prepared nor is there functionality in the code to do so.
+    /// as usual, this is recycled code from another project 
+    /// (the best code is the code you wrote 6 months ago)
+    /// </summary>
     public class AppSettings
     {
+
         #region Public Methods
 
+        /// <summary>
+        /// read a configuration section from the app.config
+        /// </summary>
+        /// <param name="key">key 'name'</param>
+        /// <returns>string 'value'</returns>
         public static string ReadSetting(string key)
         {
             string result = "";
@@ -26,6 +39,11 @@ namespace Kraken
 
         #region Private Methods
 
+        /// <summary>
+        /// not used
+        /// </summary>
+        /// <param name="key"> foo </param>
+        /// <param name="value"> brrr </param>
         private static void AddUpdateAppSettings(string key, string value)
         {
             try
@@ -49,16 +67,9 @@ namespace Kraken
             }
         }
 
-        private static void Main(string[] args)
-        {
-            ReadAllSettings();
-            ReadSetting("Setting1");
-            ReadSetting("NotValid");
-            AddUpdateAppSettings("NewSetting", "May 7, 2014");
-            AddUpdateAppSettings("Setting1", "May 8, 2014");
-            ReadAllSettings();
-        }
-
+        /// <summary>
+        /// not used
+        /// </summary>
         private static void ReadAllSettings()
         {
             try
@@ -84,5 +95,6 @@ namespace Kraken
         }
 
         #endregion Private Methods
+
     }
 }
