@@ -11,8 +11,8 @@ namespace Kraken
     {
         #region Private Fields
 
-        private string apiPrivateKey = AppSettings.ReadSetting("apiPrivateKey");
-        private string apiPublicKey = AppSettings.ReadSetting("apiPublicKey");
+        private string apiPrivateKey = Config.ApiPrivateKey;
+        private string apiPublicKey = Config.ApiPublicKey;
 
         #endregion Private Fields
 

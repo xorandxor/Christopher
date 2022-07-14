@@ -24,12 +24,12 @@ namespace Kraken
             headerline +=
                 "*************************************************************************\n";
 
-            Logging.Log(AppSettings.ReadSetting("LOGFILE"), headerline, false);
+            Logging.Log(Config.Logfile, headerline, false);
             TradeAdvice TA_RSI = TradeAdvice.Neutral;
             TradeAdvice TA_MACD = TradeAdvice.Neutral;
 
             string j = AppSettings.ReadSetting("test");
-            Logging.Log(AppSettings.ReadSetting("LOGFILE"), "this is the first log entry", true);
+            Logging.Log(Config.Logfile, "this is the first log entry", true);
             TA_RSI = TechnicalAnalysis.GetRSI();
             TA_MACD = TechnicalAnalysis.GetMACD();
 

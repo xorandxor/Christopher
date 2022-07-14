@@ -39,7 +39,7 @@ namespace Kraken
                 }
                 else //http response was blank
                 {
-                    Logging.Log(AppSettings.ReadSetting("LOGFILE"), "Error: Http response for [" + URL + "] was blank!", true);
+                    Logging.Log(Config.Logfile, "Error: Http response for [" + URL + "] was blank!", true);
                 }
             }
 
@@ -48,7 +48,7 @@ namespace Kraken
             //create log message
             string debugmessage = "http request for [" + URL + "] completed in [" + result.ToString() + " ms.]";
             //log the message to the logfile
-            Logging.Log(AppSettings.ReadSetting("LOGFILE"),debugmessage,true);
+            Logging.Log(Config.Logfile,debugmessage,true);
             
             return jsonData;
         }
@@ -113,11 +113,11 @@ namespace Kraken
             {
                 _tmp = _tmp.Substring(jsonData.IndexOf("value") + 7, 10);
                 val = Convert.ToDouble(_tmp);
-                Logging.Log(AppSettings.ReadSetting("LOGFILE"), "RSI value is :" + val.ToString(),true);
+                Logging.Log(Config.Logfile, "RSI value is :" + val.ToString(),true);
             }
             else
             {
-                Logging.Log(AppSettings.ReadSetting("LOGFILE"),"Could not parse web response for RSI - response was [" + jsonData + "]",true);
+                Logging.Log(Config.Logfile,"Could not parse web response for RSI - response was [" + jsonData + "]",true);
             }
             if(val < 30) //oversold
             {
