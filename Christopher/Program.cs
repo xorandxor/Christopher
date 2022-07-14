@@ -1,6 +1,6 @@
 ﻿using System;
 using Kraken;
-using KrakenObjects;
+using Kraken;
 
 namespace Kraken
 {
@@ -25,10 +25,14 @@ namespace Kraken
                 "*************************************************************************\n";
 
             Logging.Log(AppSettings.ReadSetting("LOGFILE"), headerline, false);
-            TradeAdvice ta = TradeAdvice.Neutral;
+            TradeAdvice TA_RSI = TradeAdvice.Neutral;
+            TradeAdvice TA_MACD = TradeAdvice.Neutral;
+
             string j = AppSettings.ReadSetting("test");
             Logging.Log(AppSettings.ReadSetting("LOGFILE"), "this is the first log entry", true);
-            ta = TechnicalAnalysis.GetRSI();
+            TA_RSI = TechnicalAnalysis.GetRSI();
+            TA_MACD = TechnicalAnalysis.GetMACD();
+
             object x = new object();
         }
 

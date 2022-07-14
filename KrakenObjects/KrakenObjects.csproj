@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="APIQueries.cs" />
     <Compile Include="AppSettings.cs" />
+    <Compile Include="KrakenExampleCode.cs" />
     <Compile Include="Logging.cs" />
     <Compile Include="Order.cs" />
     <Compile Include="TechnicalAnalysis.cs" />
@@ -57,7 +58,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

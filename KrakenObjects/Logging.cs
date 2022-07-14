@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 
-namespace KrakenObjects
+namespace Kraken
 {
     public static class Logging
     {

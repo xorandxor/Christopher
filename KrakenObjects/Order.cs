@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace KrakenObjects
+namespace Kraken
 {
     /// <summary>
     /// Self explanatory

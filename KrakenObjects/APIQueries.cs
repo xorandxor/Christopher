@@ -5,7 +5,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KrakenObjects
+namespace Kraken
 {
     public class API
     {
@@ -67,6 +67,29 @@ namespace KrakenObjects
         }
 
         #endregion Public Methods
+
+
+        #region experimental shit
+
+        /// <summary>
+        /// possibly replace async stuff with synchronous calls (easier)
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        //public static string Method(string path)
+        //{
+        //    using (var client = new HttpClient())
+        //    {
+        //        var response = client.GetAsync(path).GetAwaiter().GetResult();
+        //        if (response.IsSuccessStatusCode)
+        //        {
+        //            var responseContent = response.Content;
+        //            return responseContent.ReadAsStringAsync().GetAwaiter().GetResult();
+        //        }
+        //    }
+        //}
+
+        #endregion
 
         #region Private Methods
 
