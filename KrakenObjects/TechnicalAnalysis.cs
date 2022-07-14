@@ -87,6 +87,9 @@ namespace Kraken
               *  identify crossover events for buy/sell signals
               *  histogram increasing indicates divergence (buy)
               *  histogram decreasing indicates convergence (sell)
+              *  
+              *  whoever invented JSON should be taken out and shot
+              *  
               * */
 
 
