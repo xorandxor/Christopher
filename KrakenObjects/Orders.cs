@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 
 namespace Kraken
 {
@@ -48,8 +47,8 @@ namespace Kraken
     {
         #region Private Fields
 
-        private string apiPrivateKey = "YOUR_PRIVATE_KEY";
-        private string apiPublicKey = "YOUR_PUBLIC_KEY";
+        private string apiPrivateKey = Config.ApiPrivateKey;
+        private string apiPublicKey = Config.ApiPublicKey;
         private KrakenCloseOrderType closeOrderType = KrakenCloseOrderType.StopLoss;
         private string closePrice = "";
         private String closePrice2 = "";
@@ -67,15 +66,42 @@ namespace Kraken
         private BuyOrSellType type = BuyOrSellType.Buy;
         private int userRef = 0;
         private bool validate = false;
-
         private string volume = "";
 
         #endregion Private Fields
 
         #region Public Constructors
 
+        /// <summary>
+        /// blank constructor for complex orders 
+        /// </summary>
         public Order()
         { }
+
+        /// <summary>
+        /// Simple order with no conditional close order
+        /// </summary>
+        /// <param name="pPair">xbtusd/ethusd</param>
+        /// <param name="pBuyOrSell">buy or sell</param>
+        /// <param name="pOrderType">market, limit</param>
+        /// <param name="pPrice">price in dollars with no dollar sign</param>
+        /// <param name="pVolume">volume to be bought or sold</param>
+        /// <param name="pLeverage">leverage level requested</param>
+        public Order(
+            string pPair,
+            BuyOrSellType pBuyOrSell,
+            KrakenOrderType pOrderType,
+            string pPrice,
+            string pVolume,
+            LeverageLevel pLeverage)
+        {
+            this.pair = pPair;
+            this.type = pBuyOrSell;
+            this.orderType = pOrderType;
+            this.price = pPrice;
+            this.volume = pVolume;
+            this.leverage = pLeverage;
+        }
 
         #endregion Public Constructors
 
@@ -106,16 +132,19 @@ namespace Kraken
 
         public string AddOrder()
         {
+            //error handling stuff
             bool error = false;
             string errormessage = "";
 
+            // endpoint
             string privateEndpoint = "AddOrder";
 
-            string p = "";
+            // inpuit parameters
+            string privateInputParameters = "";
             //"pair=xdgeur&type=sell&ordertype=limit&volume=3000&price=%2b10.0%"; //Positive Percentage Example (%2 represtes +, which is a reseved character in HTTP)
 
+            //string holding the reply after the order is submitted
             string privateResponse = "";
-
 
             // sanity checks
             if (string.IsNullOrEmpty(Volume))
@@ -126,7 +155,7 @@ namespace Kraken
             if (string.IsNullOrEmpty(price))
             {
                 error = true;
-                errormessage += "[price not specified] ";
+                errormessage += "[Price not specified] ";
             }
             if (string.IsNullOrEmpty(Pair))
             {
@@ -146,11 +175,11 @@ namespace Kraken
 
             if (error == false)
             {
-                p += "pair=" + Pair + "&";
-                p += "price=" + this.Price + "&";
-                p += "volume=" + this.Volume + "&";
-                p += "type=" + this.Type.ToString() + "&";
-                p += "ordertype=" + this.OrderType.ToString() + "&";
+                privateInputParameters += "pair=" + Pair + "&";
+                privateInputParameters += "price=" + this.Price + "&";
+                privateInputParameters += "volume=" + this.Volume + "&";
+                privateInputParameters += "type=" + this.Type.ToString() + "&";
+                privateInputParameters += "ordertype=" + this.OrderType.ToString() + "&";
 
                 if (this.closeOrderType != KrakenCloseOrderType.NotSet)
                 {
@@ -169,28 +198,24 @@ namespace Kraken
                     }
                 }
 
-
+                try
+                {
+                    privateResponse = API.QueryPrivateEndpoint(privateEndpoint,
+                                                                    privateInputParameters,
+                                                                    apiPublicKey,
+                                                                    apiPrivateKey);
+                }
+                catch (Exception e)
+                {
+                    Logging.Log(Config.Logfile, "error in Order.AddOrder(): " + e.ToString(), true);
+                    Console.WriteLine("error in Order.AddOrder(): " + e.ToString());
+                }
+                System.Console.WriteLine(privateResponse);
             }
-
-
-
-        }
-        public async Task<bool> AddOrder()
-        {
-            bool result = false;
-
-            string privateEndpoint = "AddOrder";
-            string privateInputParameters = "pair=xdgeur&type=sell&ordertype=limit&volume=3000&price=%2b10.0%"; //Positive Percentage Example (%2 represtes +, which is a reseved character in HTTP)
-            string privateResponse = "";
-
-            privateResponse = await API.QueryPrivateEndpoint(privateEndpoint,
-                                                                privateInputParameters,
-                                                                apiPublicKey,
-                                                                apiPrivateKey);
-            System.Console.WriteLine(privateResponse);
-            return true;
+            return privateResponse;
         }
 
         #endregion Public Methods
+
     }
 }

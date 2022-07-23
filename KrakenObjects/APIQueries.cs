@@ -9,6 +9,7 @@ namespace Kraken
 {
     public class API
     {
+
         #region Private Fields
 
         private string apiPrivateKey = Config.ApiPrivateKey;
@@ -30,7 +31,53 @@ namespace Kraken
             return signatureString;
         }
 
-        public static async Task<string> QueryPrivateEndpoint(string endpointName,
+        /// <summary> rewrite as synchronous </summary> <param name="endpointName">AddOrder</param>
+        /// <param name="inputParameters">pair=x&price=y</param> <param name="apiPublicKey">api
+        /// key</param> <param name="apiPrivateKey">api key</param> <returns></returns>
+        public static string QueryPrivateEndpoint(string endpointName,
+                                                       string inputParameters,
+                                                       string apiPublicKey,
+                                                       string apiPrivateKey)
+        {
+            string baseDomain = "https://api.kraken.com";
+            string privatePath = "/0/private/";
+
+            string apiEndpointFullURL = baseDomain + privatePath + endpointName;
+            string nonce = DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString();
+            if (string.IsNullOrWhiteSpace(inputParameters) == false)
+            {
+                inputParameters = "&" + inputParameters;
+            }
+            string apiPostBodyData = "nonce=" + nonce + inputParameters;
+            string signature = CreateAuthenticationSignature(apiPrivateKey,
+                                                             privatePath,
+                                                             endpointName,
+                                                             nonce,
+                                                             inputParameters);
+            string jsonData;
+            using (System.Net.WebClient client = new System.Net.WebClient())
+            {
+                client.Headers.Clear();
+                client.Headers.Add("API-Key", apiPublicKey);
+                client.Headers.Add("API-Sign", signature);
+                client.Headers.Add("User-Agent", "KrakenDotNet Client");
+                StringContent data = new StringContent(apiPostBodyData, Encoding.UTF8, "application/x-www-form-urlencoded");
+                string stringToUpload = data.ToString();
+                string response = client.UploadString(apiEndpointFullURL, stringToUpload);
+                jsonData = response;
+            }
+            return jsonData;
+        }
+
+        /// <summary>
+        /// original Async method by kraken
+        /// </summary>
+        /// <param name="endpointName"> </param>
+        /// <param name="inputParameters"> </param>
+        /// <param name="apiPublicKey"> </param>
+        /// <param name="apiPrivateKey"> </param>
+        /// <returns> </returns>
+        public static async Task<string> QueryPrivateEndpointAsync(string endpointName,
                                                                string inputParameters,
                                                                string apiPublicKey,
                                                                string apiPrivateKey)
@@ -60,36 +107,29 @@ namespace Kraken
                 StringContent data = new StringContent(apiPostBodyData, Encoding.UTF8, "application/x-www-form-urlencoded");
                 HttpResponseMessage response = await client.PostAsync(apiEndpointFullURL, data);
                 jsonData = response.Content.ReadAsStringAsync().Result;
-
             }
 
             return jsonData;
         }
 
+        /// <summary> this will probably work idk till i test </summary> <param
+        /// name="endpointName">AddOrder</param> <param
+        /// name="inputParameters">pair=x&price=y</param> <param name="apiPublicKey">Api Public
+        /// Key</param> <param name="apiPrivateKey">Api Private Key</param> <returns>JSON String</returns>
+        public static string QueryPublicEndpoint(string endpointName, string inputParameters)
+        {
+            string jsonData;
+            string baseDomain = "https://api.kraken.com";
+            string publicPath = "/0/public/";
+            string apiEndpointFullURL = baseDomain + publicPath + endpointName + "?" + inputParameters;
+            using (System.Net.WebClient client = new System.Net.WebClient())
+            {
+                jsonData = client.DownloadString(apiEndpointFullURL);
+            }
+            return jsonData;
+        }
+
         #endregion Public Methods
-
-
-        #region experimental shit
-
-        /// <summary>
-        /// possibly replace async stuff with synchronous calls (easier)
-        /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        //public static string Method(string path)
-        //{
-        //    using (var client = new HttpClient())
-        //    {
-        //        var response = client.GetAsync(path).GetAwaiter().GetResult();
-        //        if (response.IsSuccessStatusCode)
-        //        {
-        //            var responseContent = response.Content;
-        //            return responseContent.ReadAsStringAsync().GetAwaiter().GetResult();
-        //        }
-        //    }
-        //}
-
-        #endregion
 
         #region Private Methods
 
@@ -105,11 +145,11 @@ namespace Kraken
         }
 
         private static byte[] ComputeSha512Hash(string apiPrivateKey,
-                                                byte[] sha256Hash,
-                                                string apiPath,
-                                                string endpointName,
-                                                string nonce,
-                                                string inputParams)
+                                                        byte[] sha256Hash,
+                                                        string apiPath,
+                                                        string endpointName,
+                                                        string nonce,
+                                                        string inputParams)
         {
             string apiEndpointPath = apiPath + endpointName;
             byte[] apiEndpointPathBytes = Encoding.UTF8.GetBytes(apiEndpointPath);
@@ -119,7 +159,13 @@ namespace Kraken
             return sha512Hash;
         }
 
-        private static async Task<string> QueryPublicEndpoint(string endpointName, string inputParameters)
+        /// <summary>
+        /// original async method by kraken
+        /// </summary>
+        /// <param name="endpointName"> </param>
+        /// <param name="inputParameters"> </param>
+        /// <returns> </returns>
+        private static async Task<string> QueryPublicEndpointAsync(string endpointName, string inputParameters)
         {
             string jsonData;
             string baseDomain = "https://api.kraken.com";
@@ -133,5 +179,6 @@ namespace Kraken
         }
 
         #endregion Private Methods
+
     }
 }
