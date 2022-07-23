@@ -8,13 +8,14 @@ namespace Kraken
     /// </summary>
     public enum BuyOrSellType
     {
-        Buy = 0,
-        Sell = 1
+        NotSet = 0,
+        Buy = 1,
+        Sell = 2
     }
 
     public enum KrakenCloseOrderType
     {
-        None = 0,
+        NotSet = 0,
         Limit = 1,
         StopLoss = 2,
         TakeProfit = 3,
@@ -24,13 +25,14 @@ namespace Kraken
 
     public enum KrakenOrderType
     {
-        Market = 0,
-        Limit = 1,
-        StopLoss = 2,
-        TakeProfit = 3,
-        StopLossLimit = 4,
-        TakeProfitLimit = 5,
-        SettlePosition = 6
+        NotSet = 0,
+        Market = 1,
+        Limit = 2,
+        StopLoss = 3,
+        TakeProfit = 4,
+        StopLossLimit = 5,
+        TakeProfitLimit = 6,
+        SettlePosition = 7
     }
 
     public enum LeverageLevel
@@ -102,6 +104,77 @@ namespace Kraken
 
         #region Public Methods
 
+        public string AddOrder()
+        {
+            bool error = false;
+            string errormessage = "";
+
+            string privateEndpoint = "AddOrder";
+
+            string p = "";
+            //"pair=xdgeur&type=sell&ordertype=limit&volume=3000&price=%2b10.0%"; //Positive Percentage Example (%2 represtes +, which is a reseved character in HTTP)
+
+            string privateResponse = "";
+
+
+            // sanity checks
+            if (string.IsNullOrEmpty(Volume))
+            {
+                error = true;
+                errormessage += "[Volume not specified] ";
+            }
+            if (string.IsNullOrEmpty(price))
+            {
+                error = true;
+                errormessage += "[price not specified] ";
+            }
+            if (string.IsNullOrEmpty(Pair))
+            {
+                error = true;
+                errormessage += "[Pair not specified] ";
+            }
+            if (this.OrderType == KrakenOrderType.NotSet)
+            {
+                error = true;
+                errormessage += "[Order type not specified] ";
+            }
+            if (this.Type == BuyOrSellType.NotSet)
+            {
+                error = true;
+                errormessage += "[BuyOrSell type not specified] ";
+            }
+
+            if (error == false)
+            {
+                p += "pair=" + Pair + "&";
+                p += "price=" + this.Price + "&";
+                p += "volume=" + this.Volume + "&";
+                p += "type=" + this.Type.ToString() + "&";
+                p += "ordertype=" + this.OrderType.ToString() + "&";
+
+                if (this.closeOrderType != KrakenCloseOrderType.NotSet)
+                {
+                    // if close order is specified but price isnt then this will not work
+                    if (string.IsNullOrEmpty(this.closePrice))
+                    {
+                        error = true;
+                        errormessage += "[Close order was enabled but close price not specified] ";
+                    }
+
+                    //if closing order is specified and price 2 not set then this will cause an error
+                    if (string.IsNullOrEmpty(this.closePrice2))
+                    {
+                        error = true;
+                        errormessage += "[Close order was enabled but close price2 not specified] ";
+                    }
+                }
+
+
+            }
+
+
+
+        }
         public async Task<bool> AddOrder()
         {
             bool result = false;
