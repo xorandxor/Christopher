@@ -175,11 +175,11 @@ namespace Kraken
 
             if (error == false)
             {
-                privateInputParameters += "pair=" + Pair + "&";
-                privateInputParameters += "price=" + this.Price + "&";
-                privateInputParameters += "volume=" + this.Volume + "&";
-                privateInputParameters += "type=" + this.Type.ToString() + "&";
-                privateInputParameters += "ordertype=" + this.OrderType.ToString() + "&";
+                privateInputParameters += "pair=" + Pair.ToLower() + "&";
+                privateInputParameters += "price=" + this.Price.ToLower() + "&";
+                privateInputParameters += "volume=" + this.Volume.ToLower() + "&";
+                privateInputParameters += "type=" + this.Type.ToString().ToLower() + "&";
+                privateInputParameters += "ordertype=" + this.OrderType.ToString().ToLower() + "&";
 
                 if (this.closeOrderType != KrakenCloseOrderType.NotSet)
                 {
@@ -198,8 +198,12 @@ namespace Kraken
                     }
                 }
 
+                privateInputParameters = privateInputParameters.Substring(0,privateInputParameters.Length - 1);
+
                 try
                 {
+                    Logging.Log(Config.Logfile, "Submitting order with paramneters:[" + privateInputParameters + "]", true);
+
                     privateResponse = API.QueryPrivateEndpoint(privateEndpoint,
                                                                     privateInputParameters,
                                                                     apiPublicKey,
@@ -210,7 +214,13 @@ namespace Kraken
                     Logging.Log(Config.Logfile, "error in Order.AddOrder(): " + e.ToString(), true);
                     Console.WriteLine("error in Order.AddOrder(): " + e.ToString());
                 }
+                Logging.Log(Config.Logfile,"Kraken Response: "+ privateResponse,true);
+
                 System.Console.WriteLine(privateResponse);
+            }
+            else
+            {
+                Logging.Log(Config.Logfile, errormessage, true);
             }
             return privateResponse;
         }

@@ -8,9 +8,7 @@ namespace Kraken
     {
         #region Private Fields
 
-        private static string bitmexKey = "API_KEY";
-        private static string bitmexSecret = "API_SECRET";
-
+       
         #endregion Private Fields
 
         #region Private Methods
@@ -25,13 +23,13 @@ namespace Kraken
                 "*************************************************************************\n";
 
             Logging.Log(Config.Logfile, headerline, false);
-            TradeAdvice TA_RSI = TradeAdvice.Neutral;
-            TradeAdvice TA_MACD = TradeAdvice.Neutral;
+            
 
             string j = AppSettings.ReadSetting("test");
             Logging.Log(Config.Logfile, "this is the first log entry", true);
-            TA_RSI = TechnicalAnalysis.GetRSI();
-            TA_MACD = TechnicalAnalysis.GetMACD();
+           
+            Order o = new Order("xbtusd", BuyOrSellType.Buy, KrakenOrderType.Market, "10000", ".01", LeverageLevel.FiveToOne);
+            o.AddOrder();
 
             object x = new object();
         }
