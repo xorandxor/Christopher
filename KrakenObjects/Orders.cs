@@ -103,6 +103,22 @@ namespace Kraken
             this.leverage = pLeverage;
         }
 
+        public Order(
+            string pPair,
+            BuyOrSellType pBuyOrSell,
+            KrakenOrderType pOrderType,
+            string pPrice,
+            string pVolume,
+            LeverageLevel pLeverage)
+        {
+            this.pair = pPair;
+            this.type = pBuyOrSell;
+            this.orderType = pOrderType;
+            this.price = pPrice;
+            this.volume = pVolume;
+            this.leverage = pLeverage;
+        }
+
         #endregion Public Constructors
 
         #region Public Properties
