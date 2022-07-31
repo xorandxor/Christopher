@@ -162,6 +162,10 @@ namespace Kraken
 
         #region Public Methods
 
+        /// <summary>
+        /// only call this method once all the internal variables are filled or it will blow up bigly
+        /// </summary>
+        /// <returns> </returns>
         public string AddOrder()
         {
             //error handling stuff
@@ -242,8 +246,10 @@ namespace Kraken
                     }
                 }
 
+                //trim last '&' char
                 privateInputParameters = privateInputParameters.Substring(0, privateInputParameters.Length - 1);
 
+                //submit the order to kraken
                 try
                 {
                     Logging.Log(Config.Logfile, "Submitting order with paramneters:[" + privateInputParameters + "]", true);
@@ -258,6 +264,8 @@ namespace Kraken
                     Logging.Log(Config.Logfile, "error in Order.AddOrder(): " + e.ToString(), true);
                     Console.WriteLine("error in Order.AddOrder(): " + e.ToString());
                 }
+
+                //log response
                 Logging.Log(Config.Logfile, "Kraken Response: " + privateResponse, true);
 
                 System.Console.WriteLine(privateResponse);
