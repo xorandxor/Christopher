@@ -47,8 +47,8 @@ namespace Kraken
     {
         #region Private Fields
 
-        private string apiPrivateKey = Config.ApiPrivateKey;
-        private string apiPublicKey = Config.ApiPublicKey;
+        private string apiPrivKey = Config.ApiPrivateKey;
+        private string apiPubKey = Config.ApiPublicKey;
         private KrakenCloseOrderType closeOrderType = KrakenCloseOrderType.StopLoss;
         private string closePrice = "";
         private String closePrice2 = "";
@@ -173,10 +173,10 @@ namespace Kraken
             string errormessage = "";
 
             // endpoint
-            string privateEndpoint = "AddOrder";
+            string priEndPoint = "AddOrder";
 
             // inpuit parameters
-            string privateInputParameters = "";
+            string priInParams = "";
             //"pair=xdgeur&type=sell&ordertype=limit&volume=3000&price=%2b10.0%"; //Positive Percentage Example (%2 represtes +, which is a reseved character in HTTP)
 
             //string holding the reply after the order is submitted
@@ -211,11 +211,11 @@ namespace Kraken
 
             if (error == false)
             {
-                privateInputParameters += "pair=" + Pair.ToLower() + "&";
-                privateInputParameters += "price=" + this.Price.ToLower() + "&";
-                privateInputParameters += "volume=" + this.Volume.ToLower() + "&";
-                privateInputParameters += "type=" + this.Type.ToString().ToLower() + "&";
-                privateInputParameters += "ordertype=" + this.OrderType.ToString().ToLower() + "&";
+                priInParams += "pair=" + Pair.ToLower() + "&";
+                priInParams += "price=" + this.Price.ToLower() + "&";
+                priInParams += "volume=" + this.Volume.ToLower() + "&";
+                priInParams += "type=" + this.Type.ToString().ToLower() + "&";
+                priInParams += "ordertype=" + this.OrderType.ToString().ToLower() + "&";
 
                 //conditional close order
                 if (this.closeOrderType != KrakenCloseOrderType.NotSet)
@@ -237,27 +237,27 @@ namespace Kraken
                     //conditional close order
                     if ((this.closeOrderType != KrakenCloseOrderType.NotSet) & (error == false))
                     {
-                        if (this.closeOrderType == KrakenCloseOrderType.StopLoss) { privateInputParameters += "close[stop-loss]" + "&"; }
-                        if (this.closeOrderType == KrakenCloseOrderType.StopLossLimit) { privateInputParameters += "close[stop-loss-limit]" + "&"; }
-                        if (this.closeOrderType == KrakenCloseOrderType.TakeProfitLimit) { privateInputParameters += "close[take-profit-limit]" + "&"; }
-                        if (this.closeOrderType == KrakenCloseOrderType.Limit) { privateInputParameters += "close[limit]" + "&"; }
-                        privateInputParameters += "close[price]=" + this.closePrice;
-                        privateInputParameters += "close[price2]=" + this.closePrice2;
+                        if (this.closeOrderType == KrakenCloseOrderType.StopLoss) { priInParams += "close[stop-loss]" + "&"; }
+                        if (this.closeOrderType == KrakenCloseOrderType.StopLossLimit) { priInParams += "close[stop-loss-limit]" + "&"; }
+                        if (this.closeOrderType == KrakenCloseOrderType.TakeProfitLimit) { priInParams += "close[take-profit-limit]" + "&"; }
+                        if (this.closeOrderType == KrakenCloseOrderType.Limit) { priInParams += "close[limit]" + "&"; }
+                        priInParams += "close[price]=" + this.closePrice;
+                        priInParams += "close[price2]=" + this.closePrice2;
                     }
                 }
 
                 //trim last '&' char
-                privateInputParameters = privateInputParameters.Substring(0, privateInputParameters.Length - 1);
+                priInParams = priInParams.Substring(0, priInParams.Length - 1);
 
-                //submit the order to kraken
+                // submit the order to kraken
+                // note: if krasken kicks the order back no error will be thrown, you need to check
+                // to json that is returned for error codes e.g. insufficient funds or whatever this
+                // is for the web request itself (wifi disconnected, request timed out, etc)
                 try
                 {
-                    Logging.Log(Config.Logfile, "Submitting order with paramneters:[" + privateInputParameters + "]", true);
+                    Logging.Log(Config.Logfile, "Submitting order with paramneters:[" + priInParams + "]", true);
 
-                    privateResponse = API.QueryPrivateEndpoint(privateEndpoint,
-                                                                    privateInputParameters,
-                                                                    apiPublicKey,
-                                                                    apiPrivateKey);
+                    privateResponse = API.QueryPrivateEndpoint(priEndPoint, priInParams, apiPubKey, apiPrivKey);
                 }
                 catch (Exception e)
                 {
@@ -265,8 +265,10 @@ namespace Kraken
                     Console.WriteLine("error in Order.AddOrder(): " + e.ToString());
                 }
 
-                //log response
+                //log response to logfile
                 Logging.Log(Config.Logfile, "Kraken Response: " + privateResponse, true);
+
+                /// TODO: check private response for errors and log the transaction ID to sql database
 
                 System.Console.WriteLine(privateResponse);
             }
