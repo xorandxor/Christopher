@@ -1,4 +1,7 @@
-﻿namespace Kraken
+﻿using System.Collections.Generic;
+using System.Collections.Specialized;
+
+namespace Kraken
 {
     /// <summary>
     /// class to hold Open High Low Close Data from Kraken API
@@ -10,7 +13,7 @@
         private string error = "";
         private bool errorState = false;
         private int last = 0;
-        private TickData[] tickerData = new TickData[0];
+        private List<TickData> tickerData = new List<TickData>();// [0];
 
         #endregion Private Fields
 
@@ -19,10 +22,18 @@
         public string Error { get => error; set => error = value; }
         public bool ErrorState { get => errorState; set => errorState = value; }
         public int Last { get => last; set => last = value; }
-        public TickData[] TickerData { get => tickerData; set => tickerData = value; }
+        public List<TickData> TickerData { get => tickerData; set => tickerData = value; }
 
         #endregion Public Properties
+
+        public OHLC getOHLCData()
+        {
+            return null;
+        }
     }
+
+    
+
 
     /// <summary>
     /// class to hold OHLC tick data from Kraken API

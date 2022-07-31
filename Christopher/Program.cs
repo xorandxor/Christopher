@@ -6,12 +6,10 @@
 
         private static void Main(string[] args)
         {
-            string headerline =
-                "*************************************************************************\n";
-            headerline +=
-                "*** Christopher Trading System Start\n";
-            headerline +=
-                "*************************************************************************\n";
+            string headerline = "";
+            headerline += "***********************************************\n";
+            headerline += "***--- Christopher Trading System Start  ---***\n";
+            headerline += "***********************************************\n";
 
             Logging.Log(Config.Logfile, headerline, false);
 

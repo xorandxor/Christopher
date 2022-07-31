@@ -13,6 +13,7 @@ namespace Kraken
         /// </summary>
         /// <param name="file">c:\users\bob\mylog.log</param>
         /// <param name="message">string of text you want logged</param>
+        /// <param name="timestamp">if true time is in the entry</param>
         public static void Log(string file, string message, bool timestamp)
         {
             string fileName = file;
@@ -38,6 +39,24 @@ namespace Kraken
             }
 
         }
+
+
+        /// <summary>
+        /// simple overload with timestamp using default logfile
+        /// </summary>
+        /// <param name="message"></param>
+        public static void Log(string message)
+        {
+            Log(Config.Logfile, message, true);  
+        }
+        
+        /// <summary>
+        /// Simple logging function to log entries to a text file for debugging 
+        /// Since filename is not specificed we call config.logfile and hope its listed in the app.config
+        /// </summary>
+        /// <param name="message">string of text you want logged</param>
+        /// <param name="timestamp">bool indicating if you want the datetime.meow prefixed to the message</param>
+
         /// <summary>
         /// Simple logging function to log entries to a text file for debugging 
         /// Since filename is not specificed we call config.logfile and hope its listed in the app.config
