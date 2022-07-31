@@ -73,7 +73,7 @@ namespace Kraken
         #region Public Constructors
 
         /// <summary>
-        /// blank constructor for complex orders 
+        /// blank constructor for complex orders
         /// </summary>
         public Order()
         { }
@@ -81,12 +81,12 @@ namespace Kraken
         /// <summary>
         /// Simple order with no conditional close order
         /// </summary>
-        /// <param name="pPair">xbtusd/ethusd</param>
-        /// <param name="pBuyOrSell">buy or sell</param>
-        /// <param name="pOrderType">market, limit</param>
-        /// <param name="pPrice">price in dollars with no dollar sign</param>
-        /// <param name="pVolume">volume to be bought or sold</param>
-        /// <param name="pLeverage">leverage level requested</param>
+        /// <param name="pPair"> xbtusd/ethusd </param>
+        /// <param name="pBuyOrSell"> buy or sell </param>
+        /// <param name="pOrderType"> market, limit </param>
+        /// <param name="pPrice"> price in dollars with no dollar sign </param>
+        /// <param name="pVolume"> volume to be bought or sold </param>
+        /// <param name="pLeverage"> leverage level requested </param>
         public Order(
             string pPair,
             BuyOrSellType pBuyOrSell,
@@ -102,15 +102,16 @@ namespace Kraken
             this.volume = pVolume;
             this.leverage = pLeverage;
         }
+
         /// <summary>
         /// Simple order with no conditional close order
         /// </summary>
-        /// <param name="pPair">xbtusd/ethusd</param>
-        /// <param name="pBuyOrSell">buy or sell</param>
-        /// <param name="pOrderType">market, limit</param>
-        /// <param name="pPrice">price in dollars with no dollar sign</param>
-        /// <param name="pVolume">volume to be bought or sold</param>
-        /// <param name="pLeverage">leverage level requested</param>
+        /// <param name="pPair"> xbtusd/ethusd </param>
+        /// <param name="pBuyOrSell"> buy or sell </param>
+        /// <param name="pOrderType"> market, limit </param>
+        /// <param name="pPrice"> price in dollars with no dollar sign </param>
+        /// <param name="pVolume"> volume to be bought or sold </param>
+        /// <param name="pLeverage"> leverage level requested </param>
         public Order(
             string pPair,
             BuyOrSellType pBuyOrSell,
@@ -133,8 +134,6 @@ namespace Kraken
             this.closePrice = pClosePrice;
             this.closePrice2 = PClosePrice2;
         }
-
-
 
         #endregion Public Constructors
 
@@ -241,15 +240,9 @@ namespace Kraken
                         privateInputParameters += "close[price]=" + this.closePrice;
                         privateInputParameters += "close[price2]=" + this.closePrice2;
                     }
-
-
-
                 }
 
-                
-
-
-                privateInputParameters = privateInputParameters.Substring(0,privateInputParameters.Length - 1);
+                privateInputParameters = privateInputParameters.Substring(0, privateInputParameters.Length - 1);
 
                 try
                 {
@@ -265,7 +258,7 @@ namespace Kraken
                     Logging.Log(Config.Logfile, "error in Order.AddOrder(): " + e.ToString(), true);
                     Console.WriteLine("error in Order.AddOrder(): " + e.ToString());
                 }
-                Logging.Log(Config.Logfile,"Kraken Response: "+ privateResponse,true);
+                Logging.Log(Config.Logfile, "Kraken Response: " + privateResponse, true);
 
                 System.Console.WriteLine(privateResponse);
             }
@@ -277,6 +270,5 @@ namespace Kraken
         }
 
         #endregion Public Methods
-
     }
 }
