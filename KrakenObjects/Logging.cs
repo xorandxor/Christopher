@@ -9,11 +9,11 @@ namespace Kraken
         #region Public Methods
 
         /// <summary>
-        /// Simple logging function to log entries to a text file for debugging 
+        /// Simple logging function to log entries to a text file for debugging
         /// </summary>
-        /// <param name="file">c:\users\bob\mylog.log</param>
-        /// <param name="message">string of text you want logged</param>
-        /// <param name="timestamp">if true time is in the entry</param>
+        /// <param name="file"> c:\users\bob\mylog.log </param>
+        /// <param name="message"> string of text you want logged </param>
+        /// <param name="timestamp"> if true time is in the entry </param>
         public static void Log(string file, string message, bool timestamp)
         {
             string fileName = file;
@@ -37,36 +37,29 @@ namespace Kraken
             {
                 Console.Write(exp.Message);
             }
-
         }
-
 
         /// <summary>
         /// simple overload with timestamp using default logfile
         /// </summary>
-        /// <param name="message"></param>
+        /// <param name="message"> </param>
         public static void Log(string message)
         {
-            Log(Config.Logfile, message, true);  
+            Log(Config.Logfile, message, true);
         }
-        
-        /// <summary>
-        /// Simple logging function to log entries to a text file for debugging 
-        /// Since filename is not specificed we call config.logfile and hope its listed in the app.config
-        /// </summary>
-        /// <param name="message">string of text you want logged</param>
-        /// <param name="timestamp">bool indicating if you want the datetime.meow prefixed to the message</param>
 
         /// <summary>
-        /// Simple logging function to log entries to a text file for debugging 
-        /// Since filename is not specificed we call config.logfile and hope its listed in the app.config
+        /// Simple logging function to log entries to a text file for debugging Since filename is
+        /// not specificed we call config.logfile and hope its listed in the app.config
         /// </summary>
-        /// <param name="message">string of text you want logged</param>
-        /// <param name="timestamp">bool indicating if you want the datetime.meow prefixed to the message</param>
+        /// <param name="message"> string of text you want logged </param>
+        /// <param name="timestamp">
+        /// bool indicating if you want the datetime.meow prefixed to the message
+        /// </param>
         public static void Log(string message, bool timestamp)
         {
             string fileName = Config.Logfile;
-            
+
             try
             {
                 using (StreamWriter writer = new StreamWriter(fileName, true))
@@ -87,8 +80,8 @@ namespace Kraken
             {
                 Console.Write(exp.Message);
             }
-
         }
+
         public static void WriteToEventLog(string sLog, string sSource, string message, EventLogEntryType level)
         {
             if (!EventLog.SourceExists(sSource)) EventLog.CreateEventSource(sSource, sLog);

@@ -102,8 +102,39 @@ namespace Kraken
             this.volume = pVolume;
             this.leverage = pLeverage;
         }
+        /// <summary>
+        /// Simple order with no conditional close order
+        /// </summary>
+        /// <param name="pPair">xbtusd/ethusd</param>
+        /// <param name="pBuyOrSell">buy or sell</param>
+        /// <param name="pOrderType">market, limit</param>
+        /// <param name="pPrice">price in dollars with no dollar sign</param>
+        /// <param name="pVolume">volume to be bought or sold</param>
+        /// <param name="pLeverage">leverage level requested</param>
+        public Order(
+            string pPair,
+            BuyOrSellType pBuyOrSell,
+            KrakenOrderType pOrderType,
+            string pPrice,
+            string pVolume,
+            LeverageLevel pLeverage,
+            KrakenCloseOrderType pCloseOrderType,
+            string pClosePrice,
+            string PClosePrice2
+            )
+        {
+            this.pair = pPair;
+            this.type = pBuyOrSell;
+            this.orderType = pOrderType;
+            this.price = pPrice;
+            this.volume = pVolume;
+            this.leverage = pLeverage;
+            this.closeOrderType = pCloseOrderType;
+            this.closePrice = pClosePrice;
+            this.closePrice2 = PClosePrice2;
+        }
 
-       
+
 
         #endregion Public Constructors
 
@@ -199,6 +230,18 @@ namespace Kraken
                         errormessage += "[Close order was enabled but close price2 not specified] ";
                     }
                 }
+
+                //conditional close order
+                if(this.closeOrderType != KrakenCloseOrderType.NotSet)
+                {
+                    if (this.closeOrderType == KrakenCloseOrderType.StopLoss) { privateInputParameters += "close[stop-loss]" + "&"; }
+                    if (this.closeOrderType == KrakenCloseOrderType.StopLossLimit) { privateInputParameters += "close[stop-loss-limit]" + "&"; }
+                    if (this.closeOrderType == KrakenCloseOrderType.TakeProfitLimit) { privateInputParameters += "close[take-profit-limit]" + "&"; }
+                    if (this.closeOrderType == KrakenCloseOrderType.Limit) { privateInputParameters += "close[limit]" + "&"; }
+                    privateInputParameters += "close[price1]=" + this.closePrice;
+                    privateInputParameters += "close[price2]=" + this.closePrice2;
+                }
+
 
                 privateInputParameters = privateInputParameters.Substring(0,privateInputParameters.Length - 1);
 
